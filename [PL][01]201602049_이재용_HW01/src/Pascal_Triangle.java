@@ -1,20 +1,23 @@
 import java.util.Scanner;
 
 public class Pascal_Triangle {
-	static int countPrint = 0;
-	static int find=0;
-	static int make=0;
-	static int maxNum=1;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner input = new Scanner(System.in);
 		int num = input.nextInt();
 		int a[][] = new int[2 * num - 1][num];	//입력 받는 값에 따라 이차원 배열의 크기를 설정해준다.
 		Frame(a, num - 1, num - 1);				//생성된 배열에 맞게 1을 채워 큰틀을 만든다.
-		make(a,0,0);							//틀과 함께 그 안에 들어간 수를 계산하여 넣어준다.
-		findMax(a,0,0);							//나중에 출력에서 간격을 맞춰주기 위해서 이차원 배열에서 가장 큰수의 문자길이를 계산한다.
-		print(a, 0, 0);							//이차원 배열을 과제의 조건에 맞게 출력해준다.
-//		exception(a,0,0);//틀을 기준으로 값을 생성하고 출력한다.
+		make(a,0,0,0);							//틀과 함께 그 안에 들어간 수를 계산하여 넣어준다.
+		int b;
+		if(num==1){								//출력전에 모양을 이쁘게 만들기위한 예외처리
+			b=0;
+		}
+		else if(num%2==0) {
+			b=(2 * num)/2;
+		}else {
+			b=(2 * num - 1)/2;
+		}
+		print(a, 0, 0,0, Integer.toString(a[b][num-1]).length());							//이차원 배열을 과제의 조건에 맞게 출력해준다.
 	}
 
 	public static void Frame(int a[][], int x, int y) {		// 맨처음 이차원 배열을 다 돌면서 1에 해당하는 부분을 다 채워주는 메소드
@@ -27,11 +30,14 @@ public class Pascal_Triangle {
 
 	}	
 
-	public static void print(int a[][], int x, int y) {	//이차원 배열에 값들을 출력해주는 메소드
-		if (countPrint == a.length * a[0].length) {		//전역 변수로 이차원 배열의 전체 크기에 도달하면 무조건 탈줄 하도록 조건을 걸었다.
+	public static void print(int a[][], int x, int y, int countPrint, int maxNum) {	//이차원 배열에 값들을 출력해주는 메소드
+		if (countPrint==a.length * a[0].length) {		//전역 변수로 이차원 배열의 전체 크기에 도달하면 무조건 탈줄 하도록 조건을 걸었다.
 			return;
 		}
 		countPrint++;
+	
+			if(x==a.length ||y==a[0].length)
+		 	return;
 		
 		if (a[x][y] != 0) {								//과제에서 요구하는 것과 같이 숫자만 출력할 수 있게 한다.
 
@@ -43,14 +49,14 @@ public class Pascal_Triangle {
 		}
 		
 		if (x == a.length - 1) {						//x좌표의 값을 다돌면 y좌표를 증가 시켜준다.
-			System.out.println();
-			print(a, 0, y + 1);
+			nextLine(2);							//배열을 한줄 출력할때마다 줄바꿈을 해준다.
+			print(a, 0, y + 1, countPrint, maxNum);
 		}
-		print(a, x + 1, y);								//x좌표를 증가 시키면서 메소드를 실행한다.
+		print(a, x + 1, y, countPrint, maxNum);								//x좌표를 증가 시키면서 메소드를 실행한다.
 	}
 	
 
-	public static void make(int a[][], int x, int y) {	//이차원 배열에 들가갈 값을 계산해 주는 메소드
+	public static void make(int a[][], int x, int y,int make) {	//이차원 배열에 들가갈 값을 계산해 주는 메소드
 		if (make == a.length * a[0].length) {		//전역 변수로 이차원 배열의 전체 크기에 도달하면 무조건 탈줄 하도록 조건을 걸었다.
 			return;
 		}
@@ -62,32 +68,19 @@ public class Pascal_Triangle {
 		
 		
 		if (x == a.length - 1) {						//x좌표의 값을 다돌면 y좌표를 증가 시켜준다.
-			make(a, 0, y + 1);
+			make(a, 0, y + 1,make);
 		}
-		make(a, x + 1, y);								//x좌표를 증가 시키면서 메소드를 실행한다.
-	}
-	
-
-	public static void findMax(int a[][], int x, int y) {	//이차원 배열에 들어있는 수중에서 가장 큰수의 글자수를 찾아주는 메소드
-		if (find == a.length * a[0].length) {		//전역 변수로 이차원 배열의 전체 크기에 도달하면 무조건 탈줄 하도록 조건을 걸었다.
-			return;
-		}
-		find++;
-		
-		if(x>1 && y>1 && x<a.length-1) {				//이차원 배열을 처음부터 순서 대로 돌면서 가장 큰값을 전역변수에 채워준다.
-			if(maxNum<Integer.toString(a[x][y]).length()) {
-				maxNum=Integer.toString(a[x][y]).length();
-			}
-		}
-		if (x == a.length - 1) {						//x좌표의 값을 다돌면 y좌표를 증가 시켜준다.
-			findMax(a, 0, y + 1);
-		}
-		findMax(a, x + 1, y);								//x좌표를 증가 시키면서 메소드를 실행한다.
+		make(a, x + 1, y,make);								//x좌표를 증가 시키면서 메소드를 실행한다.
 	}
 	
 	public static void blank(int num) {// 콜솔창에 잘 정렬될 수 있게 입력된 num값만큼 띄어쓰기를 축력하는 메소드
 		if(num == 0 )return ;		   //탈출조건 num이 0이 될 경우
 		System.out.print(" ");
 		blank(num-1);				   //재귀적으로 들어가 1씩 작은 수를 대입하여 들어간다.
+	}
+	public static void nextLine(int num) {//입력한 값만큼 띄어쓰기를 해주는 메소드
+		if(num==0) return ;				//blank()와 같은 원리
+		System.out.println();
+		nextLine(num-1);
 	}
 }
