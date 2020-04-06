@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.List;
+
 public class Scanner {
 	public static class Token {
 		public final TokenType type;
@@ -45,6 +46,42 @@ public class Scanner {
 		// TransM[3]['0'] = 3, ..., TransM[3]['9'] = 3,
 		// ...
 		// The values of the other entries are all -1.
+		int transM[][] = new int[4][128];
+		for (int i = 0; i < 4; i++) { // -1로 모두 초기화
+			for (int k = 0; k < 128; k++) {
+				transM[i][k] = -1;
+			}
+		}
+
+		for (int i = 0; i < 4; i++) {
+
+			int j = 0;
+			for (j = '0'; j <= '9'; j++) { // 0~9
+				transM[i][j] = 2;
+				if (i == 3) {
+					transM[i][j] = 3;
+				}
+			}
+
+			j = '-'; // -
+			if (i == 0) {
+				transM[i][j] = 1;
+			} else if (i == 3) {
+				transM[i][j] = 3;
+			}
+
+			if (i == 0 || i == 3) {
+				for (j = 'a'; j <= 'z'; j++) { // a~z
+
+					transM[i][j] = 3;
+				}
+
+				for (j = 'A'; j <= 'Z'; j++) { //A~Z
+					transM[i][j] = 3;
+				}
+			}
+		}
+
 	}
 
 	private Token nextToken() {
@@ -59,6 +96,7 @@ public class Scanner {
 			// 문자열의 문자를 하나씩 가져와 현재상태와 TransM를 이용하여 다음 상태를 판별
 			// 만약 입력된 문자의 상태가 reject 이면 에러메세지 출력 후 return함
 			// 새로 얻은 상태를 현재 상태로 저장
+			
 		}
 		for (TokenType t : TokenType.values()) {
 			if (t.finalState == stateOld) {
@@ -85,18 +123,19 @@ public class Scanner {
 		}
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		try {
-		FileReader fr = new FileReader("c:/as03.txt");
-		BufferedReader br = new BufferedReader(fr);
-		String source = br.readLine();
-		Scanner s = new Scanner(source);
-		List<Token> tokens = s.tokenize();
-		System.out.println(tokens);
-		}catch(IOException e ) {
-			
-		}
-	}
-
+	public static void main(String[] args) throws IOException {
+	      System.out.println("실행중이긴함");
+	      FileReader fr = new FileReader("c:/as03.txt");
+	      System.out.println("실행중이긴함");
+	      BufferedReader br = new BufferedReader(fr);
+	      System.out.println("실행중이긴함");
+	      String source = br.readLine();
+	      System.out.println("실행중이긴함");
+	      Scanner s = new Scanner(source);
+	      System.out.println("실행중이긴함");
+	      List<Token> tokens = s.tokenize();
+	      System.out.println("실행중이긴함");
+	      System.out.println(tokens);
+	      System.out.println("실행중이긴함");
+	      }
 }
